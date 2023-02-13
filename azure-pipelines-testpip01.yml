@@ -1,0 +1,61 @@
+trigger:
+- non
+pool:
+  name: Default
+steps:
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTaskV2@2
+  displayName: 'Terraform init'
+  inputs:
+    azureSubscription: 'edfaf05d-e154-4419-8020-f5e20f278d63'
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/test-pip01'
+    backendServiceArm: 'Azure'
+    backendAzureRmResourceGroupName: 'rg-tf-01'
+    backendAzureRmStorageAccountName: 'tfbe01'
+    backendAzureRmContainerName: 'lok'
+    backendAzureRmKey: 'terraform5.tfstate'
+
+- task: TerraformTaskV2@2
+  displayName: 'Terraform validate'
+  inputs:
+    azureSubscription: 'edfaf05d-e154-4419-8020-f5e20f278d63'
+    provider: 'azurerm'
+    command: 'validate'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/test-pip01'
+    backendServiceArm: 'Azure'
+    environmentServiceNameAzureRM: 'Azure'
+
+- task: TerraformTaskV2@2
+  displayName: 'Terraform plan'
+  inputs:
+    azureSubscription: 'edfaf05d-e154-4419-8020-f5e20f278d63'
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/test-pip01'
+    backendServiceArm: 'Azure'
+    environmentServiceNameAzureRM: 'Azure'
+
+#- task: TerraformTaskV2@2
+#  displayName: 'Terraform apply'
+#  inputs:
+#    azureSubscription: 'edfaf05d-e154-4419-8020-f5e20f278d63'
+#    provider: 'azurerm'
+#    command: 'apply'
+#    workingDirectory: '$(System.DefaultWorkingDirectory)/test-pip01'
+#    backendServiceArm: 'Azure'
+#    environmentServiceNameAzureRM: 'Azure'
+
+- task: TerraformTaskV2@2
+  displayName: 'Terraform Destroy'
+  inputs:
+    azureSubscription: 'edfaf05d-e154-4419-8020-f5e20f278d63'
+    provider: 'azurerm'
+    command: 'destroy'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/test-pip01'
+    backendServiceArm: 'Azure'
+    environmentServiceNameAzureRM: 'Azure'
